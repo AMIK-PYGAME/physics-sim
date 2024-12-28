@@ -11,15 +11,15 @@ screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE
 physics_group_1 = pygame.sprite.Group()
 
 physics_objects.physics_box(physics_group_1,
-                            mass =534,
+                            mass =600,
                             position = (screen_width/2,screen_height/2),
                             image = pygame.Surface((100,100)),
                             gravity = False,
                             boundaries = True,
                             movement = True,
-                            air_resistance=False,
-                            initial_velocity = (0,0),
-                            constant_force=(1000,0),
+                            air_resistance=True,
+                            initial_velocity = (0,1),
+                            constant_force=(100000,0),
                             type_of_motion = "SHM")
 # Main loop
 
@@ -36,7 +36,7 @@ while run:
     physics_group_1.update()
     physics_group_1.draw(screen)
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(90)
 
 pygame.quit()
 

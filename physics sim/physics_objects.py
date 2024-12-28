@@ -1,5 +1,6 @@
 import pygame
 import math 
+import data
 pygame.init()
 clock = pygame.time.Clock()
 class physics_box(pygame.sprite.Sprite):
@@ -25,18 +26,20 @@ class physics_box(pygame.sprite.Sprite):
         self.air_density = 1.2278
         self.drag_coefficient = 1.22
         self.mass = mass
+        self.data = []
         self.apply_resistance = air_resistance
-        self.check = [ (i) for i in range(0,100)]
+        self.pre_vel = initial_velocity
     
     def update(self):
         """the update function is called each frame 
         .this is where every function is called
-        this can help to arrange the order in which the functions
+        this can only help to arrange the order in which the functions
         are called.for more info about the function go to the respective 
         function."""
        
         self.dt = clock.tick() / 1000
         self.calc_resulting_vector(self.dt)
+       
         if self.boundaries:
             self.independant_vector_normal_reaction()
         
@@ -45,7 +48,12 @@ class physics_box(pygame.sprite.Sprite):
         
         if self.gravity:
             self.independant_vector_gravity()
-
+        
+        """any variable can be put as arguments to view changes with time with that variable
+         space should be pressed t view the changes
+         example: self.data_visualization_for_debigging(self.velocity.x) """
+        self.data_visualization_for_debugging(self.rect.centerx)    
+    
     def independant_vector_normal_reaction(self):
      """this function acts as a reaction force whenever a body
      collides with a boundary. this function does not change the 
@@ -72,7 +80,7 @@ class physics_box(pygame.sprite.Sprite):
         pass
     
     def calc_resulting_vector(self,dt):
-        self.velocity += ((self.constant_force)  + (self.calc_air_resistance()))/self.mass
+        self.velocity += ((self.constant_force)  + (self.calc_air_resistance()))/self.mass * dt
     
     def calc_totall_energy_in_system(self):
         displacement = (self.position-self.rect.center).length()
@@ -89,7 +97,7 @@ class physics_box(pygame.sprite.Sprite):
       angle = math.atan2(self.velocity.y, self.velocity.x)
       cross_sec_length = self.image.get_width() * abs(math.cos(angle))
     
-      velocity_squared = self.velocity.length()
+      velocity_squared = self.velocity.length_squared()
       drag = -0.001 * self.air_density * velocity_squared * self.drag_coefficient * cross_sec_length
       
       #calc the resistance vector by multiplying 
@@ -99,4 +107,8 @@ class physics_box(pygame.sprite.Sprite):
      
      return pygame.math.Vector2(0,0)
 
-    
+    def data_visualization_for_debugging(self,iterator:float):
+        self.data.append(iterator)
+        if pygame.key.get_just_pressed()[pygame.K_SPACE]:
+
+            data.transform_to_file(self.data)
