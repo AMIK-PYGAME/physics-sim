@@ -50,7 +50,7 @@ class physics_box(pygame.sprite.Sprite):
             self.independant_vector_gravity()
         
         """any variable can be put as arguments to view changes with time with that variable
-         space should be pressed t view the changes
+         space should be pressed to view the changes
          example: self.data_visualization_for_debigging(self.velocity.x) """
         self.data_visualization_for_debugging(self.rect.centerx)    
     
